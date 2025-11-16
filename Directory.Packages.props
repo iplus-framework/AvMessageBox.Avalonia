@@ -1,0 +1,10 @@
+<Project>
+  <!-- iPlus settings and overrides -->
+  <Import Condition="'$(UseAvaloniaFork)' == 'True'" Project="$(MSBuildThisFileDirectory)../iPlus/Directory.Packages.props" />
+  <!-- End iPlus settings and overrides -->
+
+  <ItemGroup Condition="'$(UseAvaloniaFork)' == 'False'">
+    <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="DialogHost.Avalonia" Version="0.9.2" />
+  </ItemGroup>
+</Project>

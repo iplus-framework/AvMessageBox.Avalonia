@@ -1,46 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!--<TargetFramework>net9.0</TargetFramework>-->
+    <TargetFramework>$(AvaloniaBuildFramework)</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
-    </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <AvaloniaXaml Remove="Models\**" />
-        <Compile Remove="Models\**" />
-        <EmbeddedResource Remove="Models\**" />
-        <None Remove="Models\**" />
-    </ItemGroup>
+  <ItemGroup>
+    <AvaloniaXaml Remove="Models\**" />
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <ProjectCapability Include="Avalonia" />
-        <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
-    </ItemGroup>
+  <!--<ItemGroup>
+    <ProjectCapability Include="Avalonia" />
+    <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
+  </ItemGroup>-->
 
-    <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.1.5" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.1.5" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.5" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.1.5" />
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.0" />
-    </ItemGroup>
+  <ItemGroup Condition="'$(UseAvaloniaFork)' == 'False'">
+    <PackageReference Include="Avalonia"/>
+    <PackageReference Include="Avalonia.Diagnostics"/>
+    <PackageReference Include="Avalonia.Themes.Fluent"/>
+    <PackageReference Include="Avalonia.Desktop"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm"/>
+  </ItemGroup>
+  
+  <!-- iPlus settings and overrides -->
+  <Import Condition="'$(UseAvaloniaFork)' == 'True'" Project="../../iPlus/build/AvaloniaInclude.props" />
+  <Import Condition="'$(UseAvaloniaFork)' == 'True'" Project="$(AvaloniaRootDir)/build/BuildTargets.targets" />
+  <Import Condition="'$(UseAvaloniaFork)' == 'True'" Project="$(AvaloniaRootDir)/build/SourceGenerators.props" />
+  <!-- End iPlus settings and overrides -->
+  
+  <ItemGroup>
+    <None Update="icon-rider.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
-    <ItemGroup>
-        <None Update="icon-rider.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\MsBox.Avalonia.Markdown\MsBox.Avalonia.Markdown.csproj" />
-        <ProjectReference Include="..\MsBox.Avalonia\MsBox.Avalonia.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MsBox.Avalonia.Markdown\MsBox.Avalonia.Markdown.csproj" />
+    <ProjectReference Include="..\MsBox.Avalonia\MsBox.Avalonia.csproj" />
+  </ItemGroup>
 </Project>
