@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Threading;
 
@@ -9,8 +10,8 @@ namespace MsBox.Avalonia.Controls;
 
 public partial class MsBoxCustomView : UserControl, IFullApi<string>, ISetCloseAction
 {
-    private string _buttonResult;
-    private Action _closeAction;
+    private string _buttonResult = string.Empty;
+    private Action _closeAction = () => { };
 
     public MsBoxCustomView()
     {
@@ -44,13 +45,17 @@ public partial class MsBoxCustomView : UserControl, IFullApi<string>, ISetCloseA
 
     public Task Copy()
     {
-        var clipboard = TopLevel.GetTopLevel(this).Clipboard;
+        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
         var text = ContentTextBox.SelectedText;
         if (string.IsNullOrEmpty(text))
         {
             text = (DataContext as AbstractMsBoxViewModel)?.ContentMessage;
         }
-        return clipboard?.SetTextAsync(text);
+        if (clipboard is null || text is null)
+            return Task.CompletedTask;
+        var dataTransfer = new DataTransfer();
+        dataTransfer.Add(DataTransferItem.CreateText(text));
+        return clipboard.SetDataAsync(dataTransfer);
     }
 
     public void Close()
@@ -58,7 +63,7 @@ public partial class MsBoxCustomView : UserControl, IFullApi<string>, ISetCloseA
         _closeAction?.Invoke();
     }
 
-    public void CloseWindow(object sender, EventArgs eventArgs)
+    public void CloseWindow(object? sender, EventArgs eventArgs)
     {
         ((IClose)this).Close();
     }

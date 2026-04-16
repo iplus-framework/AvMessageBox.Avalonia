@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="MsBox.Avalonia.Markdown/MsBox.Avalonia.Markdown.csproj" />
+  <Project Path="MsBox.Avalonia/MsBox.Avalonia.csproj" />
+</Solution>

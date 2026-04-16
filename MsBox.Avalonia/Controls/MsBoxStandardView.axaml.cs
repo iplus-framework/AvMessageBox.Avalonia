@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Threading;
 
@@ -13,13 +14,13 @@ namespace MsBox.Avalonia.Controls;
 public partial class MsBoxStandardView : UserControl, IFullApi<ButtonResult>, ISetCloseAction
 {
     private ButtonResult _buttonResult = ButtonResult.None;
-    private Action _closeAction;
+    private Action _closeAction = () => { };
 
     public MsBoxStandardView()
     {
         InitializeComponent();
 
-        if (Application.Current.TryGetResource("EmbeddedMessageBoxViewLocator", out object? embeddedViewLocator))
+        if (Application.Current is { } app && app.TryGetResource("EmbeddedMessageBoxViewLocator", out object? embeddedViewLocator))
         {
             var viewLocator = embeddedViewLocator as IDataTemplate;
             if (viewLocator is not null)
@@ -56,13 +57,17 @@ public partial class MsBoxStandardView : UserControl, IFullApi<ButtonResult>, IS
 
     public Task Copy()
     {
-        var clipboard = TopLevel.GetTopLevel(this).Clipboard;
+        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
         var text = ContentTextBox.SelectedText;
         if (string.IsNullOrEmpty(text))
         {
             text = (DataContext as AbstractMsBoxViewModel)?.ContentMessage;
         }
-        return clipboard?.SetTextAsync(text);
+        if (clipboard is null || text is null)
+            return Task.CompletedTask;
+        var dataTransfer = new DataTransfer();
+        dataTransfer.Add(DataTransferItem.CreateText(text));
+        return clipboard.SetDataAsync(dataTransfer);
     }
 
     public void Close()
@@ -70,7 +75,7 @@ public partial class MsBoxStandardView : UserControl, IFullApi<ButtonResult>, IS
         _closeAction?.Invoke();
     }
 
-    public void CloseWindow(object sender, EventArgs eventArgs)
+    public void CloseWindow(object? sender, EventArgs eventArgs)
     {
         ((IClose)this).Close();
     }
