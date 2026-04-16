@@ -11,7 +11,7 @@ public class MsBoxStandardViewModel : AbstractMsBoxViewModel, ISetFullApi<Button
 {
     public readonly ClickEnum _enterDefaultButton;
     public readonly ClickEnum _escDefaultButton;
-    private IFullApi<ButtonResult> _fullApi;
+    private IFullApi<ButtonResult>? _fullApi;
 
     public MsBoxStandardViewModel(MessageBoxStandardParams @params) :
         base(@params, @params.Icon)
@@ -26,7 +26,7 @@ public class MsBoxStandardViewModel : AbstractMsBoxViewModel, ISetFullApi<Button
         }
 
         SetButtons(@params.ButtonDefinitions);
-        ButtonClickCommand = new RelayCommand(o => ButtonClick(o.ToString()));
+        ButtonClickCommand = new RelayCommand(o => ButtonClick(o?.ToString()));
         EnterClickCommand = new RelayCommand(_ => EnterClick());
         EscClickCommand = new RelayCommand(_ => EscClick());
     }
@@ -44,14 +44,14 @@ public class MsBoxStandardViewModel : AbstractMsBoxViewModel, ISetFullApi<Button
     public bool IsCancelShowed { get; private set; }
 
     #region Hyperlink properties
-    public override RelayCommand HyperLinkCommand { get; internal set; }
-    public override string HyperLinkText { get; internal set; }
+    public override RelayCommand? HyperLinkCommand { get; internal set; }
+    public override string HyperLinkText { get; internal set; } = string.Empty;
     public override bool IsHyperLinkVisible { get; internal set; }
     #endregion
 
     #region Input properties
-    public override string InputLabel { get; internal set; }
-    public override string InputValue { get; set; }
+    public override string InputLabel { get; internal set; } = string.Empty;
+    public override string InputValue { get; set; } = string.Empty;
     public override bool IsInputMultiline { get; internal set; }
     public override bool IsInputVisible { get; internal set; }
     public virtual object? Context { get; internal set; } = null;
@@ -190,17 +190,31 @@ public class MsBoxStandardViewModel : AbstractMsBoxViewModel, ISetFullApi<Button
         }
     }
 
-    public async void ButtonClick(string parameter)
+    public async void ButtonClick(string? parameter)
     {
+        if (_fullApi == null)
+        {
+            throw new InvalidOperationException("Full API is not initialized.");
+        }
+
+        var parsed = Enum.TryParse<ButtonResult>(parameter?.Trim(), true, out var buttonResult)
+            ? buttonResult
+            : ButtonResult.None;
+
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            _fullApi.SetButtonResult((ButtonResult)Enum.Parse(typeof(ButtonResult), parameter.Trim(), true));
+            _fullApi.SetButtonResult(parsed);
             _fullApi.Close();
         });
     }
 
     public async void ButtonClick(ButtonResult buttonResult)
     {
+        if (_fullApi == null)
+        {
+            throw new InvalidOperationException("Full API is not initialized.");
+        }
+
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
             _fullApi.SetButtonResult(buttonResult);

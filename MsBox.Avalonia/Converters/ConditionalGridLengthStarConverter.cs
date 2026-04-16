@@ -7,9 +7,9 @@ namespace MsBox.Avalonia.Converters;
 
 public class ConditionalGridLengthStarConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if ((bool)value)
+        if (value is true)
         {
             return GridLength.Star;
         }
@@ -19,7 +19,7 @@ public class ConditionalGridLengthStarConverter : IValueConverter
         }
     }
 
-    public object ConvertBack(object value, Type targetType, object Parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

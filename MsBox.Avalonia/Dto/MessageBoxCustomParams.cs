@@ -11,7 +11,7 @@ public class MessageBoxCustomParams : AbstractMessageBoxParams
     /// Image of window
     /// Only if Icon is None
     /// </summary>
-    public Bitmap ImageIcon { get; set; }
+    public Bitmap? ImageIcon { get; set; }
 
     /// <summary>
     /// Icon of window
@@ -22,5 +22,5 @@ public class MessageBoxCustomParams : AbstractMessageBoxParams
     /// <summary>
     /// Buttons
     /// </summary>
-    public IEnumerable<ButtonDefinition> ButtonDefinitions { get; set; }
+    public IEnumerable<ButtonDefinition> ButtonDefinitions { get; set; } = Array.Empty<ButtonDefinition>();
 }

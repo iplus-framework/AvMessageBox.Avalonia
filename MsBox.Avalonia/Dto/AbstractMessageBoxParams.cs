@@ -8,7 +8,7 @@ public abstract class AbstractMessageBoxParams
     /// <summary>
     /// Window icon of app in title bar
     /// </summary>
-    public WindowIcon WindowIcon { get; set; } = null;
+    public WindowIcon? WindowIcon { get; set; } = null;
 
     /// <summary>
     /// Ability of resizing window
@@ -33,7 +33,7 @@ public abstract class AbstractMessageBoxParams
     /// <summary>
     /// Header of messagebox window
     /// </summary>
-    public string ContentHeader { get; set; } = null;
+    public string? ContentHeader { get; set; } = null;
 
     /// <summary>
     /// Main text of messagebox body
@@ -91,7 +91,7 @@ public abstract class AbstractMessageBoxParams
     /// <summary>
     /// Determines system decorations (title bar, border, etc)
     /// </summary>
-    public WindowDecorations SystemDecorations { get; set; } = WindowDecorations.Full;
+    public WindowDecorations WindowDecorations { get; set; } = WindowDecorations.Full;
 
     /// <summary>
     /// Window under all windows
@@ -101,12 +101,12 @@ public abstract class AbstractMessageBoxParams
     /// <summary>
     /// Hyperlink
     /// </summary>
-    public HyperLinkParams HyperLinkParams { get; set; }
+    public HyperLinkParams? HyperLinkParams { get; set; }
 
     /// <summary>
     /// Input
     /// </summary>
-    public InputParams InputParams { get; set; }
+    public InputParams? InputParams { get; set; }
 
     /// <summary>
     /// param to set closeOnClickAway
@@ -119,12 +119,12 @@ public class HyperLinkParams
     /// <summary>
     ///  Hyperlink text
     /// </summary>
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 
     /// <summary>
     /// Hyperlink callback
     /// </summary>
-    public Action Action { get; set; }
+    public Action? Action { get; set; }
 }
 
 public class InputParams
@@ -132,7 +132,7 @@ public class InputParams
     /// <summary>
     /// Input label
     /// </summary>
-    public string Label { get; set; }
+    public string Label { get; set; } = string.Empty;
     /// <summary>
     ///  Input default text
     /// </summary>

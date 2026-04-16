@@ -15,13 +15,13 @@ namespace MsBox.Avalonia.ViewModels;
 
 public abstract class AbstractMsBoxViewModel : INotifyPropertyChanged, IInput
 {
-    private ICopy _copy;
+    private ICopy? _copy;
 
     protected void SetCopy(ICopy copy)
     {
         _copy = copy;
     }
-    protected AbstractMsBoxViewModel(AbstractMessageBoxParams @params, Icon icon = Icon.None, Bitmap bitmap = null)
+    protected AbstractMsBoxViewModel(AbstractMessageBoxParams @params, Icon icon = Icon.None, Bitmap? bitmap = null)
     {
         if (bitmap != null)
         {
@@ -49,14 +49,14 @@ public abstract class AbstractMsBoxViewModel : INotifyPropertyChanged, IInput
         WindowIconPath = @params.WindowIcon;
         SizeToContent = @params.SizeToContent;
         LocationOfMyWindow = @params.WindowStartupLocation;
-        SystemDecorations = @params.SystemDecorations;
+        WindowDecorations = @params.WindowDecorations;
         Topmost = @params.Topmost;
         CloseOnClickAway = @params.CloseOnClickAway;
 
         if (@params.HyperLinkParams != null)
         {
             HyperLinkText = @params.HyperLinkParams.Text;
-            HyperLinkCommand = new RelayCommand(_ => @params.HyperLinkParams.Action());
+            HyperLinkCommand = new RelayCommand(_ => @params.HyperLinkParams.Action?.Invoke());
             IsHyperLinkVisible = true;
         }
 
@@ -74,11 +74,11 @@ public abstract class AbstractMsBoxViewModel : INotifyPropertyChanged, IInput
     public bool HasIcon => ImagePath is not null;
     public FontFamily FontFamily { get; }
     public string ContentTitle { get; }
-    public string ContentHeader { get; }
+    public string? ContentHeader { get; }
     public string ContentMessage { get; set; }
     public bool Markdown { get; set; }
-    public WindowIcon WindowIconPath { get; }
-    public Bitmap ImagePath { get; }
+    public WindowIcon? WindowIconPath { get; }
+    public Bitmap? ImagePath { get; }
     public double MinWidth { get; set; }
     public double MaxWidth { get; set; }
     public double Width { get; set; }
@@ -87,18 +87,18 @@ public abstract class AbstractMsBoxViewModel : INotifyPropertyChanged, IInput
     public double MaxHeight { get; set; }
     public double Height { get; set; }
 
-    public WindowDecorations SystemDecorations { get; set; }
+    public WindowDecorations WindowDecorations { get; set; }
     public bool Topmost { get; set; }
 
     public SizeToContent SizeToContent { get; set; } = SizeToContent.Height;
 
     public WindowStartupLocation LocationOfMyWindow { get; }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     public bool CloseOnClickAway { get; private set; }
 
     #region Hyperlink properties
-    public abstract RelayCommand HyperLinkCommand { get; internal set; }
+    public abstract RelayCommand? HyperLinkCommand { get; internal set; }
     public abstract string HyperLinkText { get; internal set; }
 
     public abstract bool IsHyperLinkVisible { get; internal set; }
@@ -116,10 +116,15 @@ public abstract class AbstractMsBoxViewModel : INotifyPropertyChanged, IInput
 
     public Task Copy()
     {
+        if (_copy == null)
+        {
+            throw new InvalidOperationException("Copy action is not initialized.");
+        }
+
         return _copy.Copy();
     }
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

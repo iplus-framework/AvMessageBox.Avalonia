@@ -39,9 +39,12 @@ public class MsBox<V, VM, T> : IMsBox<T> where V : UserControl, IFullApi<T>, ISe
         }
 
         if (Application.Current != null &&
-            Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime)
+            Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime
+            {
+                MainView: ContentControl owner
+            })
         {
-            return ShowAsPopupAsync(lifetime.MainView as ContentControl);
+            return ShowAsPopupAsync(owner);
         }
 
         throw new NotSupportedException("ApplicationLifetime is not supported");
@@ -107,7 +110,7 @@ public class MsBox<V, VM, T> : IMsBox<T> where V : UserControl, IFullApi<T>, ISe
     /// <returns></returns>
     public Task<T> ShowAsPopupAsync(ContentControl owner)
     {
-        DialogHostStyles style = null;
+        DialogHostStyles? style = null;
         if (!owner.Styles.OfType<DialogHostStyles>().Any())
         {
             style = [];
@@ -166,6 +169,11 @@ public class MsBox<V, VM, T> : IMsBox<T> where V : UserControl, IFullApi<T>, ISe
     /// <returns></returns>
     public Task<T> ShowAsPopupAsync(Window owner)
     {
-        return ShowAsPopupAsync(owner as ContentControl);
+        if (owner is not ContentControl contentControl)
+        {
+            throw new ArgumentException("Owner must be a ContentControl.", nameof(owner));
+        }
+
+        return ShowAsPopupAsync(contentControl);
     }
 }
