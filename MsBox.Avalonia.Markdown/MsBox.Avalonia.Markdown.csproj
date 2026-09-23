@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageVersion>3.2.0.0</PackageVersion>
+    <PackageVersion>4.0.0.0</PackageVersion>
     <Title>MessageBox.Avalonia.Markdown</Title>
     <Authors>Lary</Authors>
     <Description>Mardkown support for Messagebox AvaloniaUI</Description>
@@ -44,6 +44,9 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MsBox.Avalonia\MsBox.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MsBox.Avalonia\MsBox.Avalonia.csproj" />

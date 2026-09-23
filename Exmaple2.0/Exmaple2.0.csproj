@@ -31,15 +31,16 @@
     <PackageReference Include="Avalonia.Diagnostics"/>
     <PackageReference Include="Avalonia.Themes.Fluent"/>
     <PackageReference Include="Avalonia.Desktop"/>
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport"/>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm"/>
   </ItemGroup>
-  
+
   <!-- iPlus settings and overrides -->
   <Import Condition="'$(UseAvaloniaFork)' == 'True'" Project="../../iPlus/build/AvaloniaInclude.props" />
   <!-- End iPlus settings and overrides -->
-  
+
   <ItemGroup>
     <None Update="icon-rider.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

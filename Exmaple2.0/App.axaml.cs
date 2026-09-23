@@ -12,6 +12,7 @@ public partial class App : Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+        this.AttachDeveloperTools();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -23,7 +24,7 @@ public partial class App : Application
                 DataContext = new MainWindowViewModel(),
             };
         }
-
+        
         base.OnFrameworkInitializationCompleted();
     }
 }

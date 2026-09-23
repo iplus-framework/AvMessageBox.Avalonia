@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <PackageVersion>3.3.1.1</PackageVersion>
+    <PackageVersion>12.0.0.0</PackageVersion>
     <Title>MessageBox.Avalonia</Title>
     <Authors>Lary</Authors>
     <Description>Messagebox for AvaloniaUI</Description>
@@ -38,6 +38,12 @@
   <Import Condition="'$(UseAvaloniaFork)' == 'True'" Project="../../iPlus/build/AvaloniaDialogHostInclude.props" />
   <!-- End iPlus settings and overrides -->
 
+  <ItemGroup>
+    <None Update="icon.jpg">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Update="icon.jpg">
       <Pack>True</Pack>
